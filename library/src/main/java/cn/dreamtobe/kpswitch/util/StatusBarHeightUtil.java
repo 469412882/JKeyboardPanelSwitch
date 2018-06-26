@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2015-2016 Jacksgong(blog.dreamtobe.cn)
+ * Copyright (C) 2015-2017 Jacksgong(blog.dreamtobe.cn)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -25,25 +25,25 @@ import android.util.Log;
  */
 public class StatusBarHeightUtil {
 
-    private static boolean INIT = false;
-    private static int STATUS_BAR_HEIGHT = 50;
+    private static boolean init = false;
+    private static int statusBarHeight = 50;
 
-    private final static String STATUS_BAR_DEF_PACKAGE = "android";
-    private final static String STATUS_BAR_DEF_TYPE = "dimen";
-    private final static String STATUS_BAR_NAME = "status_bar_height";
+    private static final String STATUS_BAR_DEF_PACKAGE = "android";
+    private static final String STATUS_BAR_DEF_TYPE = "dimen";
+    private static final String STATUS_BAR_NAME = "status_bar_height";
 
     public static synchronized int getStatusBarHeight(final Context context) {
-        if (!INIT) {
+        if (!init) {
             int resourceId = context.getResources().
                     getIdentifier(STATUS_BAR_NAME, STATUS_BAR_DEF_TYPE, STATUS_BAR_DEF_PACKAGE);
             if (resourceId > 0) {
-                STATUS_BAR_HEIGHT = context.getResources().getDimensionPixelSize(resourceId);
-                INIT = true;
+                statusBarHeight = context.getResources().getDimensionPixelSize(resourceId);
+                init = true;
                 Log.d("StatusBarHeightUtil",
-                        String.format("Get status bar height %d", STATUS_BAR_HEIGHT));
+                        String.format("Get status bar height %d", statusBarHeight));
             }
         }
 
-        return STATUS_BAR_HEIGHT;
+        return statusBarHeight;
     }
 }

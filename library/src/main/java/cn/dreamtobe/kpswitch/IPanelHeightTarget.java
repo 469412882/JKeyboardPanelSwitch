@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2015-2016 Jacksgong(blog.dreamtobe.cn)
+ * Copyright (C) 2015-2017 Jacksgong(blog.dreamtobe.cn)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -25,9 +25,10 @@ package cn.dreamtobe.kpswitch;
 public interface IPanelHeightTarget {
 
     /**
-     * for handle the panel's height, will be equal to the keyboard height which had saved last time.
+     * for handle the panel's height, will be equal to the keyboard height which had saved last
+     * time.
      */
-    void refreshHeight(final int panelHeight);
+    void refreshHeight(int panelHeight);
 
     /**
      * @return get the height of target-view.

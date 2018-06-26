@@ -72,7 +72,7 @@ public class ChattingResolvedHandleByPlaceholderActivity extends AppCompatActivi
         KPSwitchConflictUtil.attach(panelRoot, plusIv, sendEdt,
                 new KPSwitchConflictUtil.SwitchClickListener() {
                     @Override
-                    public void onClickSwitch(boolean switchToPanel) {
+                    public void onClickSwitch(View v, boolean switchToPanel) {
                         if (switchToPanel) {
                             sendEdt.clearFocus();
                         } else {
@@ -114,12 +114,11 @@ public class ChattingResolvedHandleByPlaceholderActivity extends AppCompatActivi
 
     @Override
     public boolean dispatchKeyEvent(KeyEvent event) {
-        if (event.getAction() == KeyEvent.ACTION_UP &&
-                event.getKeyCode() == KeyEvent.KEYCODE_BACK) {
-            if (panelRoot.getVisibility() != View.GONE) {
-                KPSwitchConflictUtil.hidePanelAndKeyboard(panelRoot);
-                return true;
-            }
+        if (event.getAction() == KeyEvent.ACTION_UP
+                && event.getKeyCode() == KeyEvent.KEYCODE_BACK
+                && panelRoot.getVisibility() != View.GONE) {
+            KPSwitchConflictUtil.hidePanelAndKeyboard(panelRoot);
+            return true;
         }
         return super.dispatchKeyEvent(event);
     }

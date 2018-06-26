@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2015-2016 Jacksgong(blog.dreamtobe.cn)
+ * Copyright (C) 2015-2017 Jacksgong(blog.dreamtobe.cn)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,7 +15,6 @@
  */
 package cn.dreamtobe.kpswitch.handler;
 
-import android.content.Context;
 import android.content.res.TypedArray;
 import android.util.AttributeSet;
 import android.view.View;
@@ -35,7 +34,8 @@ import cn.dreamtobe.kpswitch.util.ViewUtil;
  * Panel->Keyboard: do not need to invoke {@link View#setVisibility(int)} to let the panel gone,
  * just show keyboard, the panel will be gone automatically when keyboard is real visible, and will
  * be hide by {@link #handleHide()} -> {@link #processOnMeasure(int, int)}.
- * Easy and safe way: {@link cn.dreamtobe.kpswitch.util.KPSwitchConflictUtil#showKeyboard(View, View)}.
+ * Easy and safe way:
+ * {@link cn.dreamtobe.kpswitch.util.KPSwitchConflictUtil#showKeyboard(View, View)}.
  *
  * @see cn.dreamtobe.kpswitch.widget.KPSwitchPanelFrameLayout
  * @see cn.dreamtobe.kpswitch.widget.KPSwitchPanelLinearLayout
@@ -53,7 +53,8 @@ public class KPSwitchPanelLayoutHandler implements IPanelConflictLayout {
      * if true, the status is non-Visible or will
      * non-Visible(may delay and handle in {@link #processOnMeasure(int, int)})
      * <p/>
-     * The value of {@link View#getVisibility()} maybe be assigned dully for cover the keyboard->panel.
+     * The value of {@link View#getVisibility()} maybe be assigned dully for cover the
+     * keyboard->panel.
      * In this case, the {@code mIsHide} will mark the right status.
      * Handle by {@link #filterSetVisibility(int)} & {@link #processOnMeasure(int, int)}
      */
@@ -66,8 +67,10 @@ public class KPSwitchPanelLayoutHandler implements IPanelConflictLayout {
      * If the value is true, the panel's height will not be follow the height of the keyboard.
      * <p/>
      * Default is false.
+     *
      * @attr ref cn.dreamtobe.kpswitch.R.styleable#KPSwitchPanelLayout_ignore_recommend_height
      */
+    @SuppressWarnings("JavaDoc")
     private boolean mIgnoreRecommendHeight = false;
 
     public KPSwitchPanelLayoutHandler(final View panelLayout, final AttributeSet attrs) {
@@ -107,10 +110,12 @@ public class KPSwitchPanelLayoutHandler implements IPanelConflictLayout {
          * For handling Keyboard->Panel.
          *
          * Will be handled on {@link KPSwitchRootLayoutHandler#handleBeforeMeasure(int, int)} ->
-         * {@link IPanelConflictLayout#handleShow()} Delay show, until the {@link KPSwitchRootLayoutHandler} discover
+         * {@link IPanelConflictLayout#handleShow()} Delay show, until the
+         * {@link KPSwitchRootLayoutHandler} discover
          * the size is changed by keyboard-show. And will show, on the next frame of the above
          * change discovery.
          */
+        //noinspection RedundantIfStatement
         if (isKeyboardShowing() && visibility == View.VISIBLE) {
             return true;
         }
@@ -118,7 +123,6 @@ public class KPSwitchPanelLayoutHandler implements IPanelConflictLayout {
         return false;
     }
 
-    private final int[] processedMeasureWHSpec = new int[2];
 
     /**
      * Handle Panel -> Keyboard.
@@ -131,13 +135,14 @@ public class KPSwitchPanelLayoutHandler implements IPanelConflictLayout {
     public int[] processOnMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         if (mIsHide) {
             panelLayout.setVisibility(View.GONE);
-            /**
+            /*
              * The current frame will be visible nil.
              */
             widthMeasureSpec = View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.EXACTLY);
             heightMeasureSpec = View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.EXACTLY);
         }
 
+        final int[] processedMeasureWHSpec = new int[2];
         processedMeasureWHSpec[0] = widthMeasureSpec;
         processedMeasureWHSpec[1] = heightMeasureSpec;
 
@@ -163,9 +168,9 @@ public class KPSwitchPanelLayoutHandler implements IPanelConflictLayout {
 
     @Override
     public void handleShow() {
-        throw new IllegalAccessError("You can't invoke handle show in handler," +
-                " please instead of handling in the panel layout, maybe just need invoke " +
-                "super.setVisibility(View.VISIBLE)");
+        throw new IllegalAccessError("You can't invoke handle show in handler,"
+                + " please instead of handling in the panel layout, maybe just need invoke "
+                + "super.setVisibility(View.VISIBLE)");
     }
 
     /**
@@ -179,7 +184,7 @@ public class KPSwitchPanelLayoutHandler implements IPanelConflictLayout {
     /**
      * @param recommendPanelHeight the recommend panel height, in the most situations, the value
      *                             would be equal to the height of the keyboard.
-     * @see cn.dreamtobe.kpswitch.util.KeyboardUtil#getValidPanelHeight(Context)
+     * @see cn.dreamtobe.kpswitch.util.KeyboardUtil#getValidPanelHeight
      */
     public void resetToRecommendPanelHeight(int recommendPanelHeight) {
         if (mIgnoreRecommendHeight) {
@@ -193,9 +198,10 @@ public class KPSwitchPanelLayoutHandler implements IPanelConflictLayout {
     /**
      * @param ignoreRecommendHeight Whether ignore the recommend panel height, what would be equal
      *                              to the height of keyboard in most situations.
-     * @see #resetToRecommendPanelHeight(int)
      * @attr ref cn.dreamtobe.kpswitch.R.styleable#KPSwitchPanelLayout_ignore_recommend_height
+     * @see #resetToRecommendPanelHeight(int)
      */
+    @SuppressWarnings("JavaDoc")
     public void setIgnoreRecommendHeight(boolean ignoreRecommendHeight) {
         this.mIgnoreRecommendHeight = ignoreRecommendHeight;
     }

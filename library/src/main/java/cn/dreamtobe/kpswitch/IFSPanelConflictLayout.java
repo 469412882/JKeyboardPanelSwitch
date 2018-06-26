@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2015-2016 Jacksgong(blog.dreamtobe.cn)
+ * Copyright (C) 2015-2017 Jacksgong(blog.dreamtobe.cn)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,6 +20,9 @@ import android.view.Window;
 
 /**
  * Created by Jacksgong on 3/31/16.
+ * <p>
+ * The interface used for the panel's container layout and it used in the case of full-screen theme
+ * window.
  */
 public interface IFSPanelConflictLayout {
 
@@ -34,5 +37,5 @@ public interface IFSPanelConflictLayout {
      *
      * @param window The current window of the current visual activity.
      */
-    void recordKeyboardStatus(final Window window);
+    void recordKeyboardStatus(Window window);
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2015-2016 Jacksgong(blog.dreamtobe.cn)
+ * Copyright (C) 2015-2017 Jacksgong(blog.dreamtobe.cn)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,6 +24,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import cn.dreamtobe.kpswitch.IPanelConflictLayout;
+import cn.dreamtobe.kpswitch.util.KeyboardUtil;
 import cn.dreamtobe.kpswitch.util.StatusBarHeightUtil;
 import cn.dreamtobe.kpswitch.util.ViewUtil;
 
@@ -35,7 +36,7 @@ import cn.dreamtobe.kpswitch.util.ViewUtil;
  * @see cn.dreamtobe.kpswitch.widget.KPSwitchRootRelativeLayout
  */
 public class KPSwitchRootLayoutHandler {
-    private final static String TAG = "KPSRootLayoutHandler";
+    private static final String TAG = "KPSRootLayoutHandler";
 
     private int mOldHeight = -1;
     private final View mTargetRootView;
@@ -54,13 +55,12 @@ public class KPSwitchRootLayoutHandler {
     public void handleBeforeMeasure(final int width, int height) {
         // 由当前布局被键盘挤压，获知，由于键盘的活动，导致布局将要发生变化。
 
-        if (mIsTranslucentStatus && Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-            if (mTargetRootView.getFitsSystemWindows()) {
-                // In this case, the height is always the same one, so, we have to calculate below.
-                final Rect rect = new Rect();
-                mTargetRootView.getWindowVisibleDisplayFrame(rect);
-                height = rect.bottom - rect.top;
-            }
+        if (mIsTranslucentStatus && Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN
+                && mTargetRootView.getFitsSystemWindows()) {
+            // In this case, the height is always the same one, so, we have to calculate below.
+            final Rect rect = new Rect();
+            mTargetRootView.getWindowVisibleDisplayFrame(rect);
+            height = rect.bottom - rect.top;
         }
 
         Log.d(TAG, "onMeasure, width: " + width + " height: " + height);
@@ -96,20 +96,25 @@ public class KPSwitchRootLayoutHandler {
             return;
         }
 
-        // 检测到真正的 由于键盘收起触发了本次的布局变化
+        // 检测到布局变化非键盘引起
+        if (Math.abs(offset) < KeyboardUtil.getMinKeyboardHeight(mTargetRootView.getContext())) {
+            Log.w(TAG, "system bottom-menu-bar(such as HuaWei Mate7) causes layout changed");
+            return;
+        }
 
         if (offset > 0) {
             //键盘弹起 (offset > 0，高度变小)
             panel.handleHide();
-        } else if (panel.isKeyboardShowing()) {
+        } else if (panel.isKeyboardShowing() && panel.isVisible()) {
             // 1. 总得来说，在监听到键盘已经显示的前提下，键盘收回才是有效有意义的。
             // 2. 修复在Android L下使用V7.Theme.AppCompat主题，进入Activity，默认弹起面板bug，
-            // 第2点的bug出现原因:在Android L下使用V7.Theme.AppCompat主题，并且不使用系统的ActionBar/ToolBar，V7.Theme.AppCompat主题,还是会先默认绘制一帧默认ActionBar，然后再将他去掉（略无语）
+            // 第2点的bug出现原因:在Android L下使用V7.Theme.AppCompat主题，并且
+            // 不使用系统的ActionBar/ToolBar，V7.Theme.AppCompat主题,还是会先默认绘制一帧默认ActionBar，
+            // 然后再将他去掉（略无语）
             //键盘收回 (offset < 0，高度变大)
-            if (panel.isVisible()) {
-                // the panel is showing/will showing
-                panel.handleShow();
-            }
+
+            // the panel is showing/will showing
+            panel.handleShow();
         }
     }
 

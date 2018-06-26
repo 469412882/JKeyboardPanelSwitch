@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2015-2016 Jacksgong(blog.dreamtobe.cn)
+ * Copyright (C) 2015-2017 Jacksgong(blog.dreamtobe.cn)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -26,11 +26,11 @@ import android.content.SharedPreferences;
  */
 class KeyBoardSharedPreferences {
 
-    private final static String FILE_NAME = "keyboard.common";
+    private static final String FILE_NAME = "keyboard.common";
 
-    private final static String KEY_KEYBOARD_HEIGHT = "sp.key.keyboard.height";
+    private static final String KEY_KEYBOARD_HEIGHT = "sp.key.keyboard.height";
 
-    private volatile static SharedPreferences SP;
+    private static volatile SharedPreferences sp;
 
     public static boolean save(final Context context, final int keyboardHeight) {
         return with(context).edit()
@@ -39,15 +39,15 @@ class KeyBoardSharedPreferences {
     }
 
     private static SharedPreferences with(final Context context) {
-        if (SP == null) {
+        if (sp == null) {
             synchronized (KeyBoardSharedPreferences.class) {
-                if (SP == null) {
-                    SP = context.getSharedPreferences(FILE_NAME, Context.MODE_PRIVATE);
+                if (sp == null) {
+                    sp = context.getSharedPreferences(FILE_NAME, Context.MODE_PRIVATE);
                 }
             }
         }
 
-        return SP;
+        return sp;
     }
 
     public static int get(final Context context, final int defaultHeight) {
